@@ -187,16 +187,7 @@
 
   // Save full HTML (download)
   saveBtn.addEventListener('click', () => {
-    const blob = new Blob([generateFullHTML()], { type: 'text/html' });
-    const link = document.createElement('a');
-    link.href = URL.createObjectURL(blob);
-    link.download = 'index.html';
-    link.click();
-  });
-
-  // Generate full compiled HTML
-  function generateFullHTML() {
-    return `
+    const blob = new Blob([`
       <!DOCTYPE html>
       <html lang="en">
       <head>
@@ -208,62 +199,45 @@
         ${code.htmljs}
       </body>
       </html>
-    `;
-  }
+    `], { type: 'text/html' });
 
-  // Submit code (with choice)
+    const link = document.createElement('a');
+    link.href = URL.createObjectURL(blob);
+    link.download = 'index.html';
+    link.click();
+  });
+
+  // Submit code to email (FormSubmit)
   submitBtn.addEventListener('click', () => {
-    const choice = confirm("Would you like to send your code as an HTML file?\n\nClick 'OK' to send as file or 'Cancel' to send as text.");
+    const form = document.createElement('form');
+    form.action = "https://formsubmit.co/sentinelxide@gmail.com";
+    form.method = "POST";
+    form.style.display = "none";
 
-    if (choice) {
-      // Send as HTML file
-      const fullHTML = generateFullHTML();
-      const blob = new Blob([fullHTML], { type: 'text/html' });
-      const file = new File([blob], "sentinelx_project.html", { type: "text/html" });
+    const htmlInput = document.createElement('textarea');
+    htmlInput.name = "htmljs_code";
+    htmlInput.value = code.htmljs;
 
-      const form = new FormData();
-      form.append("_subject", "New HTML File Submission — Sentinel-X IDE");
-      form.append("_next", window.location.href);
-      form.append("attachment", file);
+    const cssInput = document.createElement('textarea');
+    cssInput.name = "css_code";
+    cssInput.value = code.css;
 
-      fetch("https://formsubmit.co/sentinelxide@gmail.com", {
-        method: "POST",
-        body: form
-      }).then(() => alert("✅ HTML file sent successfully!"))
-        .catch(() => alert("⚠️ Failed to send the HTML file."));
+    const nameInput = document.createElement('input');
+    nameInput.type = "hidden";
+    nameInput.name = "_subject";
+    nameInput.value = "New Code Submission from Sentinel-X IDE";
 
-    } else {
-      // Send as plain text fields
-      const form = document.createElement('form');
-      form.action = "https://formsubmit.co/sentinelxide@gmail.com";
-      form.method = "POST";
-      form.style.display = "none";
+    const redirect = document.createElement('input');
+    redirect.type = "hidden";
+    redirect.name = "_next";
+    redirect.value = window.location.href;
 
-      const htmlInput = document.createElement('textarea');
-      htmlInput.name = "htmljs_code";
-      htmlInput.value = code.htmljs;
-
-      const cssInput = document.createElement('textarea');
-      cssInput.name = "css_code";
-      cssInput.value = code.css;
-
-      const subject = document.createElement('input');
-      subject.type = "hidden";
-      subject.name = "_subject";
-      subject.value = "New Code Submission (Text) — Sentinel-X IDE";
-
-      const redirect = document.createElement('input');
-      redirect.type = "hidden";
-      redirect.name = "_next";
-      redirect.value = window.location.href;
-
-      form.appendChild(htmlInput);
-      form.appendChild(cssInput);
-      form.appendChild(subject);
-      form.appendChild(redirect);
-      document.body.appendChild(form);
-      form.submit();
-    }
+    form.appendChild(htmlInput);
+    form.appendChild(cssInput);
+    form.appendChild(nameInput);
+    form.appendChild(redirect);
+    document.body.appendChild(form);
+    form.submit();
   });
 </script>
 </body>

@@ -5,56 +5,76 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Sentinel-X IDE</title>
 <style>
+  @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap');
+
   body {
     margin: 0;
-    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    font-family: 'Inter', sans-serif;
     display: flex;
     flex-direction: column;
     height: 100vh;
-    background: #1e1e1e;
+    background: #0f111a;
     color: #f5f5f5;
   }
 
   header {
-    background: #0d1117;
-    padding: 10px 20px;
+    background: linear-gradient(90deg, #0a0f1a, #121827);
+    padding: 12px 24px;
     display: flex;
     justify-content: space-between;
     align-items: center;
-    border-bottom: 1px solid #333;
+    border-bottom: 1px solid #2c2c3c;
+    box-shadow: 0 2px 5px rgba(0,0,0,0.4);
   }
 
   header h1 {
     margin: 0;
-    font-size: 1.2rem;
+    font-size: 1.4rem;
+    font-weight: 700;
+    color: #00aaff;
+    display: flex;
+    align-items: center;
+    gap: 8px;
   }
 
   .button-group {
     display: flex;
-    gap: 10px;
+    gap: 8px;
     align-items: center;
   }
 
-  header button, header select {
-    background: #0a84ff;
+  header select, header button {
+    font-weight: 600;
+    font-size: 0.85rem;
     border: none;
-    padding: 8px 12px;
-    color: white;
+    border-radius: 6px;
+    padding: 6px 12px;
     cursor: pointer;
-    border-radius: 4px;
-    font-weight: bold;
-    transition: 0.2s;
-  }
-
-  header button:hover {
-    background: #006edc;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    transition: all 0.2s ease;
   }
 
   header select {
-    background: #2c2c2c;
-    border: 1px solid #444;
+    background: #1f2233;
     color: #fff;
-    font-weight: bold;
+    border: 1px solid #333;
+  }
+
+  header select:hover {
+    background: #2c2c44;
+  }
+
+  header button {
+    background: #00aaff;
+    color: #fff;
+    box-shadow: 0 2px 5px rgba(0,170,255,0.4);
+  }
+
+  header button:hover {
+    background: #007acc;
+    box-shadow: 0 4px 10px rgba(0,170,255,0.5);
   }
 
   main {
@@ -67,47 +87,65 @@
     width: 50%;
     display: flex;
     flex-direction: column;
-    border-right: 1px solid #333;
-    background: #1e1e1e;
+    border-right: 1px solid #2c2c3c;
+    background: #141528;
   }
 
   .tabs {
     display: flex;
-    background: #2c2c2c;
-    border-bottom: 1px solid #333;
+    background: #1f2233;
+    border-bottom: 1px solid #2c2c3c;
   }
 
   .tabs button {
     flex: 1;
-    background: #2c2c2c;
+    background: #1f2233;
     border: none;
     padding: 10px;
-    color: #f5f5f5;
+    color: #bbb;
+    font-weight: 600;
     cursor: pointer;
-    font-weight: bold;
+    transition: all 0.2s ease;
   }
 
   .tabs button.active {
     background: #0a84ff;
+    color: #fff;
+    box-shadow: inset 0 -2px #007acc;
   }
 
   textarea {
     flex: 1;
-    background: #1e1e1e;
-    color: #f5f5f5;
+    background: #141528;
+    color: #e0e0e0;
     border: none;
     resize: none;
-    font-family: 'Courier New', Courier, monospace;
+    font-family: 'Fira Code', monospace;
     font-size: 14px;
-    padding: 10px;
+    padding: 12px;
     outline: none;
-    line-height: 1.4;
+    line-height: 1.5;
+    scrollbar-width: thin;
+    scrollbar-color: #555 #222;
+  }
+
+  textarea::-webkit-scrollbar {
+    width: 10px;
+  }
+
+  textarea::-webkit-scrollbar-thumb {
+    background: #555;
+    border-radius: 5px;
+  }
+
+  textarea::-webkit-scrollbar-track {
+    background: #222;
   }
 
   .preview {
     flex: 1;
     background: white;
-    border-left: 1px solid #333;
+    border-left: 1px solid #2c2c3c;
     position: relative;
   }
 
@@ -117,11 +155,26 @@
     border: none;
     pointer-events: auto;
   }
+
+  /* Button Icons */
+  .icon {
+    width: 16px;
+    height: 16px;
+    fill: currentColor;
+  }
+
+  /* Smooth transitions for buttons and tabs */
+  header select, header button, .tabs button {
+    transition: all 0.2s ease-in-out;
+  }
 </style>
 </head>
 <body>
 <header>
-  <h1>Sentinel-X IDE</h1>
+  <h1>
+    <svg class="icon" viewBox="0 0 24 24"><path d="M3 12l18-12v24z"/></svg>
+    Sentinel-X IDE
+  </h1>
   <div class="button-group">
     <select id="exampleSelect">
       <option value="">📂 Load Example</option>
@@ -136,10 +189,22 @@
       <option value="examples/starter page">Starter Page</option>
       <option value="examples/student dashboard">Student Dashboard</option>
     </select>
-    <button id="runBtn">Run</button>
-    <button id="stopBtn">Stop</button>
-    <button id="saveBtn">Save</button>
-    <button id="submitBtn">Submit Code</button>
+    <button id="runBtn">
+      <svg class="icon" viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg>
+      Run
+    </button>
+    <button id="stopBtn">
+      <svg class="icon" viewBox="0 0 24 24"><path d="M6 6h12v12H6z"/></svg>
+      Stop
+    </button>
+    <button id="saveBtn">
+      <svg class="icon" viewBox="0 0 24 24"><path d="M17 3H5c-1.1 0-2 .9-2 2v14l7-3 7 3V5c0-1.1-.9-2-2-2z"/></svg>
+      Save
+    </button>
+    <button id="submitBtn">
+      <svg class="icon" viewBox="0 0 24 24"><path d="M2 21l21-9L2 3v7l15 2-15 2v7z"/></svg>
+      Submit
+    </button>
   </div>
 </header>
 

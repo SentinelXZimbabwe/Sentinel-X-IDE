@@ -156,16 +156,10 @@
     pointer-events: auto;
   }
 
-  /* Button Icons */
   .icon {
     width: 16px;
     height: 16px;
     fill: currentColor;
-  }
-
-  /* Smooth transitions for buttons and tabs */
-  header select, header button, .tabs button {
-    transition: all 0.2s ease-in-out;
   }
 </style>
 </head>
@@ -238,8 +232,6 @@ const code = {
   css: "body { font-family: Arial; background:#f0f0f0; color:#333; padding:20px; }"
 };
 
-let currentIframeWindow = null; // session state management
-
 // Initialize editor
 codeArea.value = code[activeTab];
 
@@ -280,24 +272,26 @@ codeArea.addEventListener("keydown", function(e) {
   }
 });
 
-// Update preview function
-function updatePreview() {
-  const content = `
+// ----------- Persistent iframe session management -----------
+
+function updatePreview(folder = '') {
+  const doc = previewFrame.contentDocument || previewFrame.contentWindow.document;
+  doc.open();
+  doc.write(`
     <!DOCTYPE html>
     <html lang="en">
     <head>
       <meta charset="UTF-8">
       <title>Preview</title>
-      <base target="_self">
+      ${folder ? `<base href="${folder}/">` : ''}
       <style>${code.css}</style>
     </head>
     <body>
       ${code.htmljs}
     </body>
     </html>
-  `;
-  previewFrame.srcdoc = content;
-  currentIframeWindow = previewFrame.contentWindow;
+  `);
+  doc.close();
 }
 
 // Run button
@@ -308,8 +302,10 @@ runBtn.addEventListener('click', () => {
 
 // Stop button: resets the iframe
 stopBtn.addEventListener('click', () => {
-  previewFrame.srcdoc = "<!DOCTYPE html><html><body></body></html>";
-  currentIframeWindow = null;
+  const doc = previewFrame.contentDocument || previewFrame.contentWindow.document;
+  doc.open();
+  doc.write("<!DOCTYPE html><html><body></body></html>");
+  doc.close();
 });
 
 // Load example
@@ -330,7 +326,6 @@ exampleSelect.addEventListener('change', async () => {
     codeArea.value = code[activeTab];
 
     runBtn.click(); // Automatically run after loading example
-
     alert(`✅ Loaded example: ${folder.split('/').pop()}`);
   } catch (err) {
     alert("❌ Failed to load example. Run the IDE on localhost using python -m http.server");

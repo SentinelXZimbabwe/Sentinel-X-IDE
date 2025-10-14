@@ -1,0 +1,27 @@
+body {
+  display: flex;
+  height: 100vh;
+  justify-content: center;
+  align-items: center;
+  background: #222;
+  color: white;
+  font-family: 'Segoe UI', sans-serif;
+}
+.card {
+  background: #333;
+  padding: 20px;
+  border-radius: 10px;
+  text-align: center;
+}
+.card img {
+  border-radius: 50%;
+}
+button {
+  margin-top: 10px;
+  background: #0078ff;
+  border: none;
+  color: white;
+  padding: 8px 12px;
+  border-radius: 4px;
+  cursor: pointer;
+}

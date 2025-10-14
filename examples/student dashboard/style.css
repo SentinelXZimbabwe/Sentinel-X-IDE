@@ -1,0 +1,22 @@
+body {
+  background: #121212;
+  color: white;
+  font-family: 'Segoe UI', sans-serif;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+}
+.dashboard {
+  background: #1e1e1e;
+  padding: 40px;
+  border-radius: 10px;
+}
+ul {
+  list-style: none;
+  padding: 0;
+}
+li {
+  padding: 8px 0;
+  border-bottom: 1px solid #333;
+}

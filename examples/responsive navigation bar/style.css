@@ -1,0 +1,26 @@
+body {
+  margin: 0;
+  font-family: Arial, sans-serif;
+}
+nav {
+  background: #0a84ff;
+}
+ul {
+  display: flex;
+  justify-content: center;
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+li {
+  margin: 0 15px;
+}
+a {
+  color: white;
+  text-decoration: none;
+  padding: 14px 10px;
+  display: block;
+}
+a:hover {
+  background: #006edc;
+}

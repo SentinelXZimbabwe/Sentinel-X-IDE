@@ -1,0 +1,20 @@
+body {
+  margin: 0;
+  background: linear-gradient(135deg, #0a84ff, #00c6ff);
+  height: 100vh;
+  color: white;
+  text-align: center;
+  font-family: Arial;
+}
+header {
+  padding-top: 20%;
+}
+.btn {
+  display: inline-block;
+  margin-top: 20px;
+  background: white;
+  color: #0a84ff;
+  padding: 10px 20px;
+  text-decoration: none;
+  border-radius: 6px;
+}

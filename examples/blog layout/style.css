@@ -1,0 +1,21 @@
+body {
+  font-family: Arial;
+  margin: 0;
+  padding: 0;
+}
+header {
+  background: #0a84ff;
+  color: white;
+  padding: 20px;
+  text-align: center;
+}
+article {
+  padding: 20px;
+  line-height: 1.6;
+}
+footer {
+  background: #111;
+  color: white;
+  text-align: center;
+  padding: 10px;
+}

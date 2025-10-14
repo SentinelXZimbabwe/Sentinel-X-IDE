@@ -93,6 +93,7 @@
     font-size: 14px;
     padding: 10px;
     outline: none;
+    line-height: 1.4;
   }
 
   .preview {
@@ -160,6 +161,35 @@
 
   htmljsTab.addEventListener('click', () => switchTab('htmljs'));
   cssTab.addEventListener('click', () => switchTab('css'));
+
+  // Auto-indentation logic
+  codeArea.addEventListener("keydown", function(e) {
+    // TAB key - insert spaces instead of losing focus
+    if (e.key === "Tab") {
+      e.preventDefault();
+      const start = this.selectionStart;
+      const end = this.selectionEnd;
+      const indent = "  "; // use "\t" if you prefer real tabs
+      this.value = this.value.substring(0, start) + indent + this.value.substring(end);
+      this.selectionStart = this.selectionEnd = start + indent.length;
+    }
+
+    // ENTER key - auto-indent next line
+    if (e.key === "Enter") {
+      const start = this.selectionStart;
+      const lineStart = this.value.lastIndexOf("\n", start - 1) + 1;
+      const currentLine = this.value.substring(lineStart, start);
+      const match = currentLine.match(/^\s+/);
+      if (match) {
+        e.preventDefault();
+        const indent = match[0];
+        const before = this.value.substring(0, start);
+        const after = this.value.substring(this.selectionEnd);
+        this.value = before + "\n" + indent + after;
+        this.selectionStart = this.selectionEnd = start + 1 + indent.length;
+      }
+    }
+  });
 
   // Update code on input
   codeArea.addEventListener('input', () => {

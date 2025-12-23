@@ -2,354 +2,395 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
+<title>Sentinel-X IDE | Website Building IDE</title>
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Sentinel-X IDE</title>
-<link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism-tomorrow.min.css" rel="stylesheet"/>
+
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;800&display=swap" rel="stylesheet">
+
 <style>
-  @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap');
-  @import url('https://fonts.googleapis.com/css2?family=Fira+Code&display=swap');
+:root{
+  --bg:#05070d;
+  --panel:#0b1020;
+  --accent:#4fd1c5;
+  --accent2:#7c7cff;
+  --text:#e5e7eb;
+  --muted:#9ca3af;
+}
 
-  body {
-    margin: 0;
-    font-family: 'Inter', sans-serif;
-    display: flex;
-    flex-direction: column;
-    height: 100vh;
-    background: #1e1e2f;
-    color: #f5f5f5;
-  }
+*{box-sizing:border-box;margin:0;padding:0}
 
-  header {
-    background: linear-gradient(90deg, #0d0f1f, #1b1d33);
-    padding: 12px 24px;
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    border-bottom: 1px solid #2c2c3c;
-    box-shadow: 0 2px 5px rgba(0,0,0,0.4);
-  }
+body{
+  font-family:Inter,system-ui;
+  background:var(--bg);
+  color:var(--text);
+  line-height:1.6;
+}
 
-  header h1 {
-    margin: 0;
-    font-size: 1.5rem;
-    font-weight: 700;
-    color: #00aaff;
-    display: flex;
-    align-items: center;
-    gap: 8px;
-  }
+/* ================= HERO ================= */
+.hero{
+  min-height:100vh;
+  background:
+    linear-gradient(rgba(5,7,13,.85),rgba(5,7,13,.95)),
+    url("images/wallpaper.png") center/cover no-repeat;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  padding:60px 20px;
+}
 
-  .button-group {
-    display: flex;
-    gap: 8px;
-    align-items: center;
-  }
+.hero-inner{
+  max-width:1100px;
+  text-align:center;
+}
 
-  header select, header button {
-    font-weight: 600;
-    font-size: 0.85rem;
-    border: none;
-    border-radius: 6px;
-    padding: 6px 12px;
-    cursor: pointer;
-    display: flex;
-    align-items: center;
-    gap: 6px;
-    transition: all 0.2s ease;
-  }
+/* PULSING LOGO GLOW (NO ROTATION) */
+.logo-ring{
+  width:240px;
+  height:240px;
+  margin:0 auto 30px;
+  border-radius:50%;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  position:relative;
+}
 
-  header select {
-    background: #2a2c3d;
-    color: #fff;
-    border: 1px solid #444;
-  }
+.logo-ring::before{
+  content:"";
+  position:absolute;
+  inset:0;
+  border-radius:50%;
+  background:
+    radial-gradient(circle,
+      rgba(79,209,197,.45),
+      rgba(124,124,255,.25),
+      transparent 65%);
+  filter:blur(22px);
+  animation:pulseGlow 3.5s ease-in-out infinite;
+}
 
-  header select:hover {
-    background: #3a3c4f;
-  }
+@keyframes pulseGlow{
+  0%{opacity:.5}
+  50%{opacity:1}
+  100%{opacity:.5}
+}
 
-  header button {
-    background: #0db0ff;
-    color: #fff;
-    box-shadow: 0 2px 5px rgba(0,176,255,0.4);
-  }
+.logo-ring img{
+  width:160px;
+  position:relative;
+  z-index:2;
+}
 
-  header button:hover {
-    background: #007acc;
-    box-shadow: 0 4px 10px rgba(0,170,255,0.5);
-  }
+.hero h1{
+  font-size:clamp(2.2rem,5vw,3rem);
+  font-weight:800;
+}
 
-  main {
-    display: flex;
-    flex: 1;
-    overflow: hidden;
-  }
+.hero h1 span{color:var(--accent)}
 
-  .editor {
-    width: 50%;
-    display: flex;
-    flex-direction: column;
-    border-right: 1px solid #2c2c3c;
-    background: #1e1e2f;
-  }
+.hero p{
+  max-width:780px;
+  margin:20px auto 35px;
+  color:var(--muted);
+  font-size:1.05rem;
+}
 
-  .tabs {
-    display: flex;
-    background: #2a2c3d;
-    border-bottom: 1px solid #2c2c3c;
-  }
+.hero .cta{
+  display:flex;
+  justify-content:center;
+  gap:15px;
+  flex-wrap:wrap;
+}
 
-  .tabs button {
-    flex: 1;
-    background: #2a2c3d;
-    border: none;
-    padding: 10px;
-    color: #bbb;
-    font-weight: 600;
-    cursor: pointer;
-    transition: all 0.2s ease;
-  }
+.btn{
+  padding:14px 26px;
+  border-radius:12px;
+  text-decoration:none;
+  font-weight:600;
+  transition:.25s;
+}
 
-  .tabs button.active {
-    background: #0db0ff;
-    color: #fff;
-    box-shadow: inset 0 -2px #007acc;
-  }
+.btn.primary{
+  background:linear-gradient(135deg,var(--accent),var(--accent2));
+  color:#05070d;
+}
 
-  textarea {
-    flex: 1;
-    background: #1e1e2f;
-    color: #d4d4d4;
-    border: none;
-    resize: none;
-    font-family: 'Fira Code', monospace;
-    font-size: 14px;
-    padding: 12px;
-    outline: none;
-    line-height: 1.5;
-    scrollbar-width: thin;
-    scrollbar-color: #555 #222;
-  }
+.btn.secondary{
+  border:1px solid var(--accent);
+  color:var(--accent);
+}
 
-  textarea::-webkit-scrollbar {
-    width: 10px;
-  }
+.btn:hover{
+  transform:translateY(-2px);
+}
 
-  textarea::-webkit-scrollbar-thumb {
-    background: #555;
-    border-radius: 5px;
-  }
+/* ================= SECTIONS ================= */
+section{padding:80px 20px}
 
-  textarea::-webkit-scrollbar-track {
-    background: #222;
-  }
+.container{max-width:1200px;margin:auto}
 
-  .preview {
-    flex: 1;
-    background: white;
-    border-left: 1px solid #2c2c3c;
-    position: relative;
-  }
+.section-title{text-align:center;margin-bottom:50px}
 
-  iframe {
-    width: 100%;
-    height: 100%;
-    border: none;
-  }
+.section-title h2{font-size:2.2rem;margin-bottom:10px}
 
-  .icon {
-    width: 16px;
-    height: 16px;
-    fill: currentColor;
-  }
+.section-title p{color:var(--muted)}
 
-  .status {
-    font-size: 0.9rem;
-    margin-left: 12px;
-    font-weight: 600;
-  }
+/* ================= GRID ================= */
+.grid{
+  display:grid;
+  grid-template-columns:repeat(auto-fit,minmax(260px,1fr));
+  gap:25px;
+}
+
+.card{
+  background:linear-gradient(180deg,#0b1020,#070b17);
+  border-radius:18px;
+  padding:25px;
+  border:1px solid rgba(255,255,255,.05);
+}
+
+.card img{
+  width:100%;
+  border-radius:12px;
+  margin-bottom:15px;
+}
+
+/* ================= PRICING ================= */
+.pricing-note{
+  max-width:850px;
+  margin:40px auto 0;
+  background:#070b17;
+  border:1px solid rgba(255,255,255,.06);
+  border-radius:18px;
+  padding:30px;
+}
+
+.pricing-note h3{
+  margin-bottom:12px;
+}
+
+.pricing-note ul{
+  margin-top:10px;
+  padding-left:18px;
+  color:var(--muted);
+}
+
+.pricing-note a{
+  color:var(--accent);
+  text-decoration:none;
+}
+
+/* ================= ARGON ================= */
+.argon{
+  position:relative;
+  background:linear-gradient(rgba(5,7,13,.92),rgba(5,7,13,.98));
+  border-top:1px solid rgba(255,255,255,.05);
+  border-bottom:1px solid rgba(255,255,255,.05);
+}
+
+.argon::after{
+  content:"ARGON";
+  position:absolute;
+  inset:0;
+  font-size:12rem;
+  font-weight:800;
+  color:rgba(255,255,255,.03);
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  pointer-events:none;
+}
+
+.argon-grid{
+  position:relative;
+  max-width:1200px;
+  margin:auto;
+  display:grid;
+  grid-template-columns:1fr 1fr;
+  gap:40px;
+  align-items:center;
+}
+
+.argon-text h2{
+  font-size:2.3rem;
+}
+
+.argon-text span{color:var(--accent)}
+
+.argon-text p{
+  margin-top:15px;
+  color:var(--muted);
+}
+
+.argon-img img{
+  width:100%;
+  border-radius:18px;
+  box-shadow:0 30px 80px rgba(0,0,0,.6);
+}
+
+/* ================= FOOTER ================= */
+footer{
+  background:#04060c;
+  padding:40px 20px;
+  border-top:1px solid rgba(255,255,255,.05);
+}
+
+.footer-inner{
+  max-width:1200px;
+  margin:auto;
+  display:grid;
+  grid-template-columns:repeat(auto-fit,minmax(240px,1fr));
+  gap:30px;
+}
+
+footer a{
+  color:var(--muted);
+  text-decoration:none;
+}
+
+footer a:hover{color:var(--accent)}
+
+/* ================= WHATSAPP ================= */
+.whatsapp{
+  position:fixed;
+  right:18px;
+  bottom:18px;
+  background:#25d366;
+  color:#000;
+  padding:14px 20px;
+  border-radius:50px;
+  font-weight:700;
+  text-decoration:none;
+  z-index:999;
+}
+
+/* ================= MOBILE ================= */
+@media(max-width:900px){
+  .argon-grid{grid-template-columns:1fr}
+}
 </style>
 </head>
+
 <body>
-<header>
-  <h1>
-    <svg class="icon" viewBox="0 0 24 24"><path d="M3 12l18-12v24z"/></svg>
-    Sentinel-X IDE
-    <span id="status" class="status" style="color:red;">Running Status: Stopped</span>
-  </h1>
-  <div class="button-group">
-    <select id="exampleSelect">
-      <option value="">📂 Load Example</option>
-      <option value="examples/blog layout">Blog Layout</option>
-      <option value="examples/business homepage">Business Homepage</option>
-      <option value="examples/contact form">Contact Form</option>
-      <option value="examples/event invitation">Event Invitation</option>
-      <option value="examples/portfolio gallery">Portfolio Gallery</option>
-      <option value="examples/profile card">Profile Card</option>
-      <option value="examples/responsive navigation bar">Responsive Navigation Bar</option>
-      <option value="examples/simple landing page">Simple Landing Page</option>
-      <option value="examples/starter page">Starter Page</option>
-      <option value="examples/student dashboard">Student Dashboard</option>
-    </select>
-    <button id="runBtn">▶ Run</button>
-    <button id="stopBtn">⏹ Stop</button>
-    <button id="saveBtn">💾 Save</button>
-    <button id="submitBtn">📤 Submit</button>
-  </div>
-</header>
 
-<main>
-  <div class="editor">
-    <div class="tabs">
-      <button id="htmljsTab" class="active">HTML & JS</button>
-      <button id="cssTab">CSS</button>
+<!-- HERO -->
+<div class="hero">
+  <div class="hero-inner">
+    <div class="logo-ring">
+      <img src="images/logo.png" alt="Sentinel-X IDE">
     </div>
-    <textarea id="codeArea"></textarea>
+
+    <h1>SENTINEL-X <span>IDE</span></h1>
+    <p>
+      A next-generation Website Building IDE for creators, students,
+      SMEs and enterprises. Build, learn, compete and deploy inside
+      one intelligent platform.
+    </p>
+
+    <div class="cta">
+      <a href="#pricing" class="btn primary">View Pricing</a>
+      <a href="#argon" class="btn secondary">ARGON Intelligence</a>
+    </div>
   </div>
-  <div class="preview">
-    <iframe id="previewFrame" sandbox="allow-scripts allow-same-origin allow-forms"></iframe>
+</div>
+
+<!-- FEATURES -->
+<section>
+  <div class="container">
+    <div class="section-title">
+      <h2>Platform Highlights</h2>
+    </div>
+
+    <div class="grid">
+      <div class="card">
+        <img src="images/code-challenge.png">
+        <h3>Code Challenges</h3>
+        <p>Monthly challenges unlocking tools, prestige and rewards.</p>
+      </div>
+
+      <div class="card">
+        <img src="images/ranking-system.png">
+        <h3>Ranking System</h3>
+        <p>Merit-based progression reflecting real technical growth.</p>
+      </div>
+
+      <div class="card">
+        <img src="images/pricing.png">
+        <h3>Flexible Access</h3>
+        <p>Low-cost access designed for emerging and professional developers.</p>
+      </div>
+    </div>
   </div>
-</main>
+</section>
 
-<script>
-const codeArea = document.getElementById('codeArea');
-const previewFrame = document.getElementById('previewFrame');
-const saveBtn = document.getElementById('saveBtn');
-const submitBtn = document.getElementById('submitBtn');
-const runBtn = document.getElementById('runBtn');
-const stopBtn = document.getElementById('stopBtn');
-const htmljsTab = document.getElementById('htmljsTab');
-const cssTab = document.getElementById('cssTab');
-const exampleSelect = document.getElementById('exampleSelect');
-const statusSpan = document.getElementById('status');
+<!-- PRICING -->
+<section id="pricing">
+  <div class="container">
+    <div class="section-title">
+      <h2>Access & Payments</h2>
+      <p>Paynow account required for subscription access</p>
+    </div>
 
-let activeTab = 'htmljs';
-const code = {
-  htmljs: "<h1>Hello World</h1>\n<p>Welcome to Sentinel-X IDE!</p>\n<script>console.log('Hello from JS!');<\/script>",
-  css: "body { font-family: Arial; background:#f0f0f0; color:#333; padding:20px; }"
-};
+    <div class="pricing-note">
+      <h3>Subscription Tiers</h3>
+      <p><strong>Basic Access:</strong> $1.99 / month</p>
+      <p><strong>Premium Access:</strong> $4.99 / month</p>
 
-// Initialize editor
-codeArea.value = code[activeTab];
+      <ul>
+        <li>Premium includes extended boilerplate code libraries</li>
+        <li>ARGON intelligence assistance enabled for Premium users</li>
+        <li>All payments processed via Paynow</li>
+      </ul>
 
-function switchTab(tab) {
-  activeTab = tab;
-  htmljsTab.classList.remove('active');
-  cssTab.classList.remove('active');
-  document.getElementById(tab + 'Tab').classList.add('active');
-  codeArea.value = code[activeTab];
-}
+      <p style="margin-top:15px">
+        Users are required to have an active Paynow account.<br>
+        <a href="https://www.paynow.co.zw" target="_blank">Create or manage your Paynow account</a>
+      </p>
+    </div>
+  </div>
+</section>
 
-htmljsTab.addEventListener('click', () => switchTab('htmljs'));
-cssTab.addEventListener('click', () => switchTab('css'));
+<!-- ARGON -->
+<section class="argon" id="argon">
+  <div class="argon-grid">
+    <div class="argon-text">
+      <h2>Powered by <span>ARGON</span></h2>
+      <p>
+        ARGON is Sentinel-X’s premium intelligence layer.
+        It provides guided architecture decisions, validated workflows,
+        enhanced boilerplate systems and contextual assistance
+        for Premium subscribers.
+      </p>
+    </div>
 
-codeArea.addEventListener('input', () => {
-  code[activeTab] = codeArea.value;
-  updatePreview();
-});
+    <div class="argon-img">
+      <img src="images/argon-premium.png" alt="ARGON Premium">
+    </div>
+  </div>
+</section>
 
-function updatePreview() {
-  const doc = previewFrame.contentDocument || previewFrame.contentWindow.document;
-  doc.open();
-  doc.write(`
-    <!DOCTYPE html>
-    <html lang="en">
-    <head>
-      <meta charset="UTF-8">
-      <style>${code.css}</style>
-    </head>
-    <body>
-      ${code.htmljs}
-    </body>
-    </html>
-  `);
-  doc.close();
-}
+<!-- FOOTER -->
+<footer>
+  <div class="footer-inner">
+    <div>
+      <h4>Sentinel-X IDE</h4>
+      <p>
+        Website Building IDE<br>
+        Designed by Sentinel Nexus Systems
+      </p>
+    </div>
 
-runBtn.addEventListener('click', () => {
-  updatePreview();
-  statusSpan.textContent = 'Running Status: Running';
-  statusSpan.style.color = 'limegreen';
-});
+    <div>
+      <h4>Contact</h4>
+      <p>
+        <a href="mailto:sentinelxide@gmail.com">sentinelxide@gmail.com</a><br>
+        <a href="https://wa.me/263787556929" target="_blank">WhatsApp Support</a>
+      </p>
+    </div>
+  </div>
+</footer>
 
-stopBtn.addEventListener('click', () => {
-  const doc = previewFrame.contentDocument || previewFrame.contentWindow.document;
-  doc.open();
-  doc.write("<!DOCTYPE html><html><body></body></html>");
-  doc.close();
-  statusSpan.textContent = 'Running Status: Stopped';
-  statusSpan.style.color = 'red';
-});
+<a class="whatsapp" href="https://wa.me/263787556929" target="_blank">WhatsApp</a>
 
-saveBtn.addEventListener('click', () => {
-  const blob = new Blob([`
-    <!DOCTYPE html>
-    <html lang="en">
-    <head>
-      <meta charset="UTF-8">
-      <style>${code.css}</style>
-    </head>
-    <body>${code.htmljs}</body>
-    </html>
-  `], { type: 'text/html' });
-  const link = document.createElement('a');
-  link.href = URL.createObjectURL(blob);
-  link.download = 'index.html';
-  link.click();
-});
-
-exampleSelect.addEventListener('change', async () => {
-  const folder = exampleSelect.value;
-  if (!folder) return;
-
-  try {
-    const [htmlResp, cssResp] = await Promise.all([
-      fetch(`${folder}/index.html`),
-      fetch(`${folder}/style.css`)
-    ]);
-
-    if (!htmlResp.ok || !cssResp.ok) throw new Error("Failed to fetch files");
-
-    code.htmljs = await htmlResp.text();
-    code.css = await cssResp.text();
-    codeArea.value = code[activeTab];
-    updatePreview();
-    alert(`✅ Loaded example: ${folder}`);
-  } catch (err) {
-    alert("❌ Failed to load example. Please run: python -m http.server");
-    console.error(err);
-  }
-});
-
-submitBtn.addEventListener('click', () => {
-  const form = document.createElement('form');
-  form.action = "https://formsubmit.co/sentinelxide@gmail.com";
-  form.method = "POST";
-  form.style.display = "none";
-
-  const htmlInput = document.createElement('textarea');
-  htmlInput.name = "htmljs_code";
-  htmlInput.value = code.htmljs;
-
-  const cssInput = document.createElement('textarea');
-  cssInput.name = "css_code";
-  cssInput.value = code.css;
-
-  const subject = document.createElement('input');
-  subject.type = "hidden";
-  subject.name = "_subject";
-  subject.value = "New Code Submission from Sentinel-X IDE";
-
-  form.appendChild(htmlInput);
-  form.appendChild(cssInput);
-  form.appendChild(subject);
-  document.body.appendChild(form);
-  form.submit();
-});
-
-updatePreview();
-statusSpan.textContent = 'Running Status: Stopped';
-statusSpan.style.color = 'red';
-</script>
 </body>
 </html>
